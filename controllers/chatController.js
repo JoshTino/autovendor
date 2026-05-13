@@ -1,4 +1,5 @@
 const Client = require('../models/Client');
+const Order = require('../models/orderModel');
 
 
 const chatController = async (app) => {
@@ -10,23 +11,25 @@ const chatController = async (app) => {
 	const name = req.body.ProfileName || "Customer";
 	const phone = req.body.WaId;
 	let response = '';
-	let currentState = null;
 
 	//console.log(req.body);
 
 
-	const client = await Client.findOne({ phone });
+	let client = await Client.findOne({ phone });
 
 	if (!client) {
-		 await Client.create({
+		client = await Client.create({
 			name,
 			phone,
 		});
 	}
-	
 
+	const currentState = client.state;
 
-	if (msg === "hi" || msg === "hello") {
+	if (msg === "hi" && currentState === "menu") {
+		client.state = "menu";
+		await client.save();
+
 		response = `*Hi ${name}, Welcome to CrownLux Hair 👑*
 
 We offer premium quality wigs tailored to perfection 💇‍♀️
@@ -37,27 +40,45 @@ Please select an option:
 2️⃣ Price List  
 3️⃣ Place Order  
 4️⃣ Speak to a Representative`;
-	} else if (msg === '1') {
+	} else if (msg === '1' && currentState === "menu") {
 		client.state = "view_available_wigs";
 		await client.save();
-		currentState = (await Client.findOne( {phone} ).select('state'))?.state;
-		response = `*💇‍♀️ Available Wigs:*
 
-1️⃣ 12" Bone Straight  
-2️⃣ 14" Curly  
-3️⃣ 16" Frontal  
-4️⃣ 18" Body Wave  
+		response = `*💇‍♀️ Available Wigs:*
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ---
+1️⃣ 12" Bone Straight – ₦35,000
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ---
+2️⃣ 14" Curly – ₦40,000  
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ---
+3️⃣ 16" Frontal – ₦55,000
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ---
+4️⃣ 18" Body Wave – ₦65,000 
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ---
 
 All wigs are:
 ✅ 100% Human Hair  
 ✅ Tangle-Free  
 ✅ Long-lasting  
 
-Reply with the *number* or *name* to proceed`;
-	} else if (msg === '2') {
-		client.state = "price_list";
+Reply with the *number* to proceed`;
+
+	} else if (currentState === "view_available_wigs" && ["1", "2", "3", "4"].includes(msg)) {
+		client.state = 'pick_color';
 		await client.save();
-		currentState = (await Client.findOne( {phone} ).select('state'))?.state;
+		const hair = "```Bone Straight```";
+		const color = "```Natural Black```";
+		const length = "```12 inches```";
+
+		response = `
+					*You Are About To Order*
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ---    
+| -Hair: ${hair}
+| -Color: ${color}
+| -Length: ${length}
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ---
+		`;
+
+	} else if (currentState === "pick_color" && ["1", "2", "3", "4"].includes(msg)) {
 		response = `*💰 Price List:*
 
 12" Bone Straight – ₦35,000  
@@ -68,10 +89,8 @@ Reply with the *number* or *name* to proceed`;
 📦 Nationwide delivery available  
 
 Reply with *3* to place your order`;
-	} else if (msg === '3') {
-		client.state = "place_order";
-		await client.save();
-		currentState = (await Client.findOne( {phone} ).select('state'))?.state;
+
+	} else if (currentState === "place_order") {
 		response = `*📝 Place Your Order*
 
 Kindly send your details in this format:
@@ -82,10 +101,8 @@ Kindly send your details in this format:
 *Location:* (Delivery address)
 
 Our team will process your order immediately 💖`;
-	} else if (msg === '4') {
-		client.state = "speak_to_a_representative";
-		await client.save();
-		currentState = (await Client.findOne( {phone} ).select('state'))?.state;
+
+	} else {
 		response = `*🤝 Customer Support*
 
 A representative will attend to you shortly.
@@ -94,28 +111,6 @@ You can also call or WhatsApp:
 📞 080XXXXXXXX
 
 Thank you for your patience 💖`;
-	} else {
-		response = `*⚠️ Invalid Option*
-
-Please select a valid option:
-
-1️⃣ View Wigs  
-2️⃣ Price List  
-3️⃣ Place Order  
-4️⃣ Speak to a Representative`;
-	}
-
-
-	if (currentState === "view_available_wigs" && msg === "1") {
-		response = `*🔴🟢Pick Color🔵⚫️*
-
-1️⃣ Natural Black (1B)
-2️⃣ Burgundy (Color 27)
-3️⃣ Honey Blonde (99J)
-4️⃣ Chestnut Brown (Color 4)
-
-Reply with the *number* to pick color
-		`;
 	}
 
 	res.set('Content-Type', 'text/xml');
