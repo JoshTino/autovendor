@@ -1,7 +1,8 @@
+const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
 	clientId: {
-		type: mongoose.Schema.Type.ObjectId,
+		type: mongoose.Schema.Types.ObjectId,
 		ref: "Client"
 	},
 	hair_type: String,
