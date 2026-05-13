@@ -8,7 +8,15 @@ const clientSchema = new mongoose.Schema({
 	phone: String,
 	state: {
 		type: String,
-		enum: ["menu" ,"view_available_wigs", "price_list", "place_order", "speak_to_a_representative", "pick_color"],
+		enum: [
+			"menu",
+			"view_available_wigs",
+			"price_list",
+			"place_order",
+			"speak_to_a_representative",
+			"pick_color",
+			"select_quantity"
+		],
 		default: "menu"
 	}
 }, {timestamps: true});
