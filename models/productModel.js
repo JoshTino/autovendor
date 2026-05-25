@@ -7,7 +7,8 @@ const productSchema = new mongoose.Schema({
 	orderCode: {
 		type: String,
 		unique: true
-	}
+	},
+	uploadId: String
 }, {timestamps: true});
 
 module.exports = mongoose.model('Product', productSchema);
