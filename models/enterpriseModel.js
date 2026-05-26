@@ -9,7 +9,16 @@ const enterpriseSchema = new mongoose.Schema({
 	},
 	state: {
 		type: String,
-		enum: ["visitor_menu", "user_menu", "get_sample", "add_product", "set_price", "view_store", "view_orders", "get_support"],
+		enum: [
+			"visitor_menu",
+			"user_menu",
+			"get_sample",
+			"add_product",
+			"set_price",
+			"view_store",
+			"view_orders",
+			"get_support"
+		],
 		default: "visitor_menu"
 	},
 	uploadId: String
