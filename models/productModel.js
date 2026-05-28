@@ -4,10 +4,7 @@ const productSchema = new mongoose.Schema({
 	phone: String,
 	description: String,
 	images: Array, 
-	orderCode: {
-		type: String,
-		unique: true
-	},
+	orderCode: String,
 	uploadId: String,
 	price: Number
 }, {timestamps: true});
