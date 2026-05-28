@@ -8,7 +8,8 @@ const productSchema = new mongoose.Schema({
 		type: String,
 		unique: true
 	},
-	uploadId: String
+	uploadId: String,
+	price: Number
 }, {timestamps: true});
 
 module.exports = mongoose.model('Product', productSchema);
