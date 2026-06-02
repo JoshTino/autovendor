@@ -53,13 +53,14 @@ Reply with the *number* proceed.
 			enterprise.state = "user_menu";
 			await enterprise.save();
 			response = `
-1️⃣ Add Products
-2️⃣ View Store
-3️⃣ View Order(s)
-4️⃣ Renew Subscription
-5️⃣Speak to a Representative
+Reply with:
+1️⃣ "add" - Add Products
+2️⃣ "store" - View Store
+3️⃣ "order" - View Order(s)
+4️⃣ "renew" - Renew Subscription
+5️⃣ "help" - Talk to Customer Care
 
-Reply with the *number* to proceed.
+Reply with the *keyword* to proceed.
 		`;
 		}
 
@@ -83,12 +84,15 @@ Your business can now:
 To get started, upload your products and set your pricing.
 
 Reply with:
-1️⃣ Add Products
-2️⃣ View Store
-3️⃣ Settings
-4️⃣ Support
+1️⃣ "add" - Add Products
+2️⃣ "store" - View Store
+3️⃣ "order" - View Order(s)
+4️⃣ "renew" - Renew Subscription
+5️⃣ "help" - Talk to Customer Care
 
 Thank you for choosing *AutoVendor* 🚀
+
+Reply with the *keyword* to proceed.
 
 			`;
 		}
@@ -248,13 +252,14 @@ We are ready to assist you!! 👌🏾
 		await enterprise.save();
 
 		response = `
-1️⃣ Add Products
-2️⃣ View Store
-3️⃣ View Order(s)
-4️⃣ Renew Subscription
-5️⃣Speak to a Representative
+Reply with:
+1️⃣ "add" - Add Products
+2️⃣ "store" - View Store
+3️⃣ "order" - View Order(s)
+4️⃣ "renew" - Renew Subscription
+5️⃣ "help" - Speak to a Representative
 
-Reply with the *number* proceed.
+Reply with the *keyword* proceed.
 		`;		
 	}
 
