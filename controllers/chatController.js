@@ -257,7 +257,7 @@ Reply with:
 2️⃣ "store" - View Store
 3️⃣ "order" - View Order(s)
 4️⃣ "renew" - Renew Subscription
-5️⃣ "help" - Speak to a Representative
+5️⃣ "help" - Talk to Customer Care
 
 Reply with the *keyword* proceed.
 		`;		
