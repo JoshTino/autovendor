@@ -111,10 +111,13 @@ Reply with the *keyword* to proceed.
 		enterprise.state = "get_sample";
 		await enterprise.save();
 		response = `
-1️⃣ *Copy product description sample, replace with the details of your product, add image(s) and send*
-			_One sample for One product_
+														ℹ️
+   *Copy product description format, replace with the details of your product, add image(s) and send*
+			_One format for One product_
 
-Reply with *sample* to get sample OR if you already know the formart, go ahead and do it
+Reply with *"sample"* to get format
+			OR
+If you already know the formart, go ahead and do it
 		`;
 	} /*else if (msg === "1" && currentState === "get_sample") {
 		enterprise.state = "add_product";
@@ -259,7 +262,7 @@ Reply with:
 4️⃣ "renew" - Renew Subscription
 5️⃣ "help" - Talk to Customer Care
 
-Reply with the *keyword* proceed.
+Reply with the *keyword* to proceed.
 		`;		
 	}
 
