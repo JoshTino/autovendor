@@ -114,7 +114,7 @@ Reply with the *keyword* to proceed.
 1️⃣ *Copy product description sample, replace with the details of your product, add image(s) and send*
 			_One sample for One product_
 
-Reply with *1* to get sample OR if you already know the formart, go ahead and do it
+Reply with *sample* to get sample OR if you already know the formart, go ahead and do it
 		`;
 	} /*else if (msg === "1" && currentState === "get_sample") {
 		enterprise.state = "add_product";
@@ -201,7 +201,7 @@ _Eg 15000 or 495000_
 			{ $set: {price: msg}}
 		);
 		response = `✅ Your item was added
-Reply with *1* to add new item.
+Reply with *add* to add another item.
 `;
 	} else if (msg === "store") {
 		enterprise.state = "view_store";
