@@ -98,7 +98,7 @@ Reply with the *keyword* to proceed.
 		}
 
 
-	} else if (msg === "add" && (currentState === "user_menu" || currentState === "set_price" || currentState === "get_sample")) {
+	} else if (msg === "add" && (currentState === "user_menu" || currentState === "set_price" || currentState === "get_sample" || currentState === "view_store")) {
 
 		//Generate random ID to be used for both product and enterprise
 		const upload_id = Math.random().toString(36).substring(2);
