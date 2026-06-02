@@ -98,7 +98,7 @@ Reply with the *keyword* to proceed.
 		}
 
 
-	} else if (msg === "1" && (currentState === "user_menu" || currentState === "set_price" || currentState === "get_sample")) {
+	} else if (msg === "add" && (currentState === "user_menu" || currentState === "set_price" || currentState === "get_sample")) {
 
 		//Generate random ID to be used for both product and enterprise
 		const upload_id = Math.random().toString(36).substring(2);
@@ -203,7 +203,7 @@ _Eg 15000 or 495000_
 		response = `✅ Your item was added
 Reply with *1* to add new item.
 `;
-	} else if (msg === "2") {
+	} else if (msg === "store") {
 		enterprise.state = "view_store";
 		await enterprise.save();
 
@@ -235,7 +235,7 @@ _[Monify Account]_
 			// twiMsg.media(item.images[0]);			
 
 
-	} else if (msg === "5" ) {
+	} else if (msg === "help" ) {
 		enterprise.state = "get_support";
 		await enterprise.save();
 		response = `
