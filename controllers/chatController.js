@@ -214,19 +214,26 @@ Reply with *add* to add another item.
 
 		const items = await Product.find({}).sort({createdAt: -1}).limit(1);
 
+		const wholecurrencyPrice = new Intl.NumberFormat('en-NG', {
+			style: 'currency',
+			currency: 'NGN',
+			minimumFractionDigits: 0,
+			maximumFractionDigits: 0
+		});
+
+
 		for (const item of items) {
+			const price = wholecurrencyPrice.format(item.price);
 			await client.messages.create({
 				from: "whatsapp:+14155238886",
 				to: "whatsapp:+2348069249696",
 				body: `
-					${item.description}\n\n*Price:* ₦${item.price}\n\nMore photos: https://autovendor.shop/product/123\n
+					${item.description}\n\n*Price:* ${price}\n\nMore photos: https://autovendor.shop/product/123\n
 
-*Pay To:* 
-_[Monify Account]_
-*0762991937*
+*Order Code:* ${item.orderCode}
 ----------------------------------------------
 ----------------------------------------------
-ℹ️ _Reply with *confirm* after payment_
+ℹ️ _Customers can find & pay for this product with the Order Code above_
 ----------------------------------------------
 				`,
 				mediaUrl: [item.images[0], item.images[1]]
