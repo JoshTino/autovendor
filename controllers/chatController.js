@@ -268,11 +268,20 @@ Reply with the *keyword* to proceed.
 		const orderCode = msg;
 		const findProduct = await Product.findOne({orderCode});
 
+		const wholecurrencyPrice = new Intl.NumberFormat('en-NG', {
+			style: 'currency',
+			currency: 'NGN',
+			minimumFractionDigits: 0,
+			maximumFractionDigits: 0
+		});
+
+		const price = wholecurrencyPrice.format(findProduct.price);
+
 		await client.messages.create({
 				from: "whatsapp:+14155238886",
 				to: "whatsapp:+2348069249696",
 				body: `
-					${findProduct.description}\n\n*Price:* ₦${findProduct.price}\n\nMore photos: https://autovendor.shop/product/123\n
+					${findProduct.description}\n\n*Price:* ${price}\n\nMore photos: https://autovendor.shop/product/123\n
 
 *Pay To:* 
 _[Paystack Titan]_
