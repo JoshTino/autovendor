@@ -24,6 +24,13 @@ const chatController = async (app) => {
 
 	let numMedia = Number(req.body.NumMedia);
 
+		const wholecurrencyPrice = new Intl.NumberFormat('en-NG', {
+			style: 'currency',
+			currency: 'NGN',
+			minimumFractionDigits: 0,
+			maximumFractionDigits: 0
+		});
+
 
 	let enterprise = await  Enterprise.findOne({phone});
 	let currentState;
@@ -214,14 +221,6 @@ Reply with *add* to add another item.
 
 		const items = await Product.find({}).sort({createdAt: -1}).limit(1);
 
-		const wholecurrencyPrice = new Intl.NumberFormat('en-NG', {
-			style: 'currency',
-			currency: 'NGN',
-			minimumFractionDigits: 0,
-			maximumFractionDigits: 0
-		});
-
-
 		for (const item of items) {
 			const price = wholecurrencyPrice.format(item.price);
 			await client.messages.create({
@@ -274,13 +273,6 @@ Reply with the *keyword* to proceed.
 	} else if (msg.startsWith("av") && msg.length === 6) {
 		const orderCode = msg;
 		const findProduct = await Product.findOne({orderCode});
-
-		const wholecurrencyPrice = new Intl.NumberFormat('en-NG', {
-			style: 'currency',
-			currency: 'NGN',
-			minimumFractionDigits: 0,
-			maximumFractionDigits: 0
-		});
 
 		const price = wholecurrencyPrice.format(findProduct.price);
 
