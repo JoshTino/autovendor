@@ -264,6 +264,27 @@ Reply with:
 
 Reply with the *keyword* to proceed.
 		`;		
+	} else if (msg.startsWith("av") && msg.length === 6) {
+		const orderCode = msg;
+		const findProduct = await Product.findOne({orderCode});
+
+		await client.messages.create({
+				from: "whatsapp:+14155238886",
+				to: "whatsapp:+2348069249696",
+				body: `
+					${findProduct.description}\n\n*Price:* ₦${findProduct.price}\n\nMore photos: https://autovendor.shop/product/123\n
+
+*Pay To:* 
+_[Paystack Titan]_
+*0762991937*
+----------------------------------------------
+----------------------------------------------
+ℹ️ _Reply with keyword *CONFIRM* after payment_
+----------------------------------------------
+				`,
+				mediaUrl: [findProduct.images[0]]
+			});
+
 	}
 
 	 res.set('Content-Type', 'text/xml');
