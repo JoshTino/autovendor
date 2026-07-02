@@ -10,6 +10,7 @@ const fs = require("fs");
 const twilio = require("twilio");
 const client = require("twilio")(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
+const monnify = require('../services/monnify');
 
 const chatController = async (app) => {
 
@@ -276,6 +277,8 @@ Reply with the *keyword* to proceed.
 
 		const price = wholecurrencyPrice.format(findProduct.price);
 
+		const amount = findProduct.price;
+		const monnifyDetails = await monnify.generateMonnifyDynamicAccountNumber(amount);
 		await client.messages.create({
 				from: "whatsapp:+14155238886",
 				to: "whatsapp:+2348069249696",
@@ -283,11 +286,11 @@ Reply with the *keyword* to proceed.
 					${findProduct.description}\n\n*Price:* ${price}\n\nMore photos: https://autovendor.shop/product/123\n
 
 *Pay To:* 
-_[Paystack Titan]_
-*0762991937*
+_[${monnifyDetails.responseBody.bankName}]_
+*${monnifyDetails.responseBody.accountNumber}*
 ----------------------------------------------
 ----------------------------------------------
-ℹ️ _Reply with keyword *CONFIRM* after payment_
+ℹ️ _Reply with keyword *CONFIRM* after successfull payment_
 ----------------------------------------------
 				`,
 				mediaUrl: [findProduct.images[0]]
