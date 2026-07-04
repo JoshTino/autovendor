@@ -347,7 +347,47 @@ Reply with the *keyword* to proceed.
 		}
 
 
-	} 
+	} else if (msg.endsWith("@gmail.com") || msg.endsWith("@yahoo.com") || msg.endsWith("@outlook.com") || msg.endsWith("@icloud.com")) {
+		const findClient = await Client.findOne({phone});
+
+		const clientEmail = msg.trim();
+
+		//Update client email
+		findClient.email = clientEmail;
+
+		//Update client state
+		findClient.state = "show_account_details";
+		await findClient.save();
+
+		//Retrieve last order code of client
+		const lastOrderCode = (await Client.findOne({phone}))?.lastOrderCode;
+
+		//Find intended product with last order code
+		const findProduct = await Product.findOne({orderCode: lastOrderCode});
+
+		const price = wholecurrencyPrice.format(findProduct.price);
+
+		const amount = findProduct.price;
+		const monnifyDetails = await monnify.generateMonnifyDynamicAccountNumber(amount);
+		await client.messages.create({
+			from: "whatsapp:+14155238886",
+			to: "whatsapp:+2348069249696",
+			body: `
+				${findProduct.description}\n\n*Price:* ${price}\n\nMore photos: https://autovendor.shop/product/123\n
+
+*Pay To:* 
+_[${monnifyDetails.responseBody.bankName}]_
+*${monnifyDetails.responseBody.accountNumber}*
+----------------------------------------------
+----------------------------------------------
+ℹ️ _Reply with keyword *CONFIRM* after successfull payment_
+----------------------------------------------
+`,
+mediaUrl: [findProduct.images[0]]
+});		
+
+
+	}
 
 	 res.set('Content-Type', 'text/xml');
 	 res.send(`<Response><Message>${response}</Message></Response>`);
