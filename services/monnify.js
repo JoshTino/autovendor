@@ -14,7 +14,7 @@ const generateMonnifyAccessToken = async () => {
 }
 
 
-const generateMonnifyDynamicAccountNumber = async (amount) => {
+const generateMonnifyDynamicAccountNumber = async (amount, email) => {
 
 	//MONNIFY TRANSACTION INITIALIZATION
 	const initializationResponse = await fetch('https://sandbox.monnify.com/api/v1/merchant/transactions/init-transaction', {
@@ -25,7 +25,7 @@ const generateMonnifyDynamicAccountNumber = async (amount) => {
 	  },
 	  body: JSON.stringify({
 	    amount: `${amount}`,
-	    customerEmail: 'stephen@ikhane.com',
+	    customerEmail: `${email}`,
 	    paymentReference: `REF_${Date.now()}`,
 	    paymentDescription: 'Trial transaction',
 	    currencyCode: 'NGN',
@@ -61,6 +61,7 @@ const generateMonnifyDynamicAccountNumber = async (amount) => {
 	return data;
 
 }
+
 
 
 module.exports = {generateMonnifyAccessToken, generateMonnifyDynamicAccountNumber}

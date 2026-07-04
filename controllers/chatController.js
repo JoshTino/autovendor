@@ -324,7 +324,7 @@ Reply with the *keyword* to proceed.
 				const price = wholecurrencyPrice.format(findProduct.price);
 
 				const amount = findProduct.price;
-				const monnifyDetails = await monnify.generateMonnifyDynamicAccountNumber(amount);
+				const monnifyDetails = await monnify.generateMonnifyDynamicAccountNumber(amount, clientEmail);
 				await client.messages.create({
 						from: "whatsapp:+14155238886",
 						to: "whatsapp:+2348069249696",
@@ -368,7 +368,7 @@ Reply with the *keyword* to proceed.
 		const price = wholecurrencyPrice.format(findProduct.price);
 
 		const amount = findProduct.price;
-		const monnifyDetails = await monnify.generateMonnifyDynamicAccountNumber(amount);
+		const monnifyDetails = await monnify.generateMonnifyDynamicAccountNumber(amount, clientEmail);
 		await client.messages.create({
 			from: "whatsapp:+14155238886",
 			to: "whatsapp:+2348069249696",
