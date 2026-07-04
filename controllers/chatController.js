@@ -17,7 +17,7 @@ const chatController = async (app) => {
 	
 
 	app.post('/webhook', async (req, res) => {
-	const msg = req.body.Body?.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+	const msg = req.body.Body?.trim().toLowerCase().replace(/[^a-z0-9@.]/g, '');
 	const name = req.body.ProfileName || "Customer";
 	const phone = req.body.WaId;
 	let response = '';
@@ -44,6 +44,7 @@ const chatController = async (app) => {
 	}
 	console.log(currentState);
 	console.log(msg.length);
+	console.log(msg);
 
 	if (msg === "hi") {
 
@@ -272,31 +273,81 @@ Reply with:
 Reply with the *keyword* to proceed.
 		`;		
 	} else if (msg.startsWith("av") && msg.length === 6) {
+
+		//Check if client exists
+		const isClient = await Client.findOne({phone});
 		const orderCode = msg;
-		const findProduct = await Product.findOne({orderCode});
 
-		const price = wholecurrencyPrice.format(findProduct.price);
+		if (!isClient) {
 
-		const amount = findProduct.price;
-		const monnifyDetails = await monnify.generateMonnifyDynamicAccountNumber(amount);
-		await client.messages.create({
+			//If client does not exists, add client.
+			const newClient = await Client.create({name: name, phone: phone});
+
+			//Save the Order Code the new client inputs.
+			newClient.lastOrderCode = orderCode;
+			await newClient.save();
+
+			//Inform client to add an email
+			await client.messages.create({
 				from: "whatsapp:+14155238886",
 				to: "whatsapp:+2348069249696",
-				body: `
-					${findProduct.description}\n\n*Price:* ${price}\n\nMore photos: https://autovendor.shop/product/123\n
-
-*Pay To:* 
-_[${monnifyDetails.responseBody.bankName}]_
-*${monnifyDetails.responseBody.accountNumber}*
-----------------------------------------------
-----------------------------------------------
-ℹ️ _Reply with keyword *CONFIRM* after successfull payment_
-----------------------------------------------
-				`,
-				mediaUrl: [findProduct.images[0]]
+				body: `ℹ️ *Type & send your email:*\n _We will send a notification after payment_`
 			});
 
-	}
+		} else {
+
+			//Check if existing client has an email
+			const existingClient = await Client.findOne({phone});
+			const clientEmail = existingClient ? existingClient.email : undefined;
+
+			if (!clientEmail) {
+
+				//Save the Order Code the existing client inputs.
+				existingClient.lastOrderCode = orderCode;
+				await existingClient.save();
+
+				//Inform client to add an email
+				await client.messages.create({
+					from: "whatsapp:+14155238886",
+					to: "whatsapp:+2348069249696",
+					body: `ℹ️ *Type & send your email:*\n _We will send a notification after payment_`
+				});
+
+			} else {
+
+				isClient.state = "show_account_details";
+				await isClient.save();
+
+				
+				const findProduct = await Product.findOne({orderCode});
+
+				const price = wholecurrencyPrice.format(findProduct.price);
+
+				const amount = findProduct.price;
+				const monnifyDetails = await monnify.generateMonnifyDynamicAccountNumber(amount);
+				await client.messages.create({
+						from: "whatsapp:+14155238886",
+						to: "whatsapp:+2348069249696",
+						body: `
+							${findProduct.description}\n\n*Price:* ${price}\n\nMore photos: https://autovendor.shop/product/123\n
+
+		*Pay To:* 
+		_[${monnifyDetails.responseBody.bankName}]_
+		*${monnifyDetails.responseBody.accountNumber}*
+		----------------------------------------------
+		----------------------------------------------
+		ℹ️ _Reply with keyword *CONFIRM* after successfull payment_
+		----------------------------------------------
+						`,
+						mediaUrl: [findProduct.images[0]]
+					});
+			}
+
+
+		}
+
+
+	} 
 
 	 res.set('Content-Type', 'text/xml');
 	 res.send(`<Response><Message>${response}</Message></Response>`);
