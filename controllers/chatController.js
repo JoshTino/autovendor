@@ -360,7 +360,6 @@ Reply with the *keyword* to proceed.
 
 		//Update client state
 		findClient.state = "show_account_details";
-		await findClient.save();
 
 		//Retrieve last order code of client
 		const lastOrderCode = (await Client.findOne({phone}))?.lastOrderCode;
@@ -372,6 +371,10 @@ Reply with the *keyword* to proceed.
 
 		const amount = findProduct.price;
 		const monnifyDetails = await monnify.generateMonnifyDynamicAccountNumber(amount, clientEmail);
+
+		findClient.lastTransactionReference = monnifyDetails.responseBody.transactionReference;
+		await findClient.save();
+
 		await client.messages.create({
 			from: "whatsapp:+14155238886",
 			to: "whatsapp:+2348069249696",
