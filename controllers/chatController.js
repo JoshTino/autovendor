@@ -314,9 +314,8 @@ Reply with the *keyword* to proceed.
 				});
 
 			} else {
-
 				isClient.state = "show_account_details";
-				await isClient.save();
+
 
 				
 				const findProduct = await Product.findOne({orderCode});
@@ -325,6 +324,10 @@ Reply with the *keyword* to proceed.
 
 				const amount = findProduct.price;
 				const monnifyDetails = await monnify.generateMonnifyDynamicAccountNumber(amount, clientEmail);
+
+				isClient.lastTransactionReference = monnifyDetails.responseBody.transactionReference;
+				await isClient.save();
+
 				await client.messages.create({
 						from: "whatsapp:+14155238886",
 						to: "whatsapp:+2348069249696",

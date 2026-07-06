@@ -16,7 +16,8 @@ const clientSchema = new mongoose.Schema({
 		],
 		default: "add_email"
 	},
-	lastOrderCode: String
+	lastOrderCode: String,
+	lastTransactionReference: String
 }, {timestamps: true});
 
 module.exports = mongoose.model("Client", clientSchema);
