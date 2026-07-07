@@ -329,21 +329,21 @@ Reply with the *keyword* to proceed.
 				await isClient.save();
 
 				await client.messages.create({
-						from: "whatsapp:+14155238886",
-						to: "whatsapp:+2348069249696",
-						body: `
-							${findProduct.description}\n\n*Price:* ${price}\n\nMore photos: https://autovendor.shop/product/123\n
+					from: "whatsapp:+14155238886",
+					to: "whatsapp:+2348069249696",
+					body: `
+						${findProduct.description}\n\n*Price:* ${price}\n\nMore photos: https://autovendor.shop/product/123\n
 
-		*Pay To:* 
-		_[${monnifyDetails.responseBody.bankName}]_
-		*${monnifyDetails.responseBody.accountNumber}*
-		----------------------------------------------
-		----------------------------------------------
-		ℹ️ _Reply with keyword *CONFIRM* after successfull payment_
-		----------------------------------------------
-						`,
-						mediaUrl: [findProduct.images[0]]
-					});
+*Pay To:* 
+_[${monnifyDetails.responseBody.bankName}]_
+*${monnifyDetails.responseBody.accountNumber}*
+----------------------------------------------
+----------------------------------------------
+ℹ️ _Reply with keyword *CONFIRM* after successfull payment_
+----------------------------------------------
+`,
+mediaUrl: [findProduct.images[0]]
+});
 			}
 
 
@@ -393,6 +393,9 @@ mediaUrl: [findProduct.images[0]]
 });		
 
 
+	} else if (msg === "confirm") {
+		const lastTransactionReference = await Client.findOne({phone})?.lastTransactionReference;
+		const encodedTransactionReference = encodeURIComponent(lastTransactionReference);
 	}
 
 	 res.set('Content-Type', 'text/xml');
