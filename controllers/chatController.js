@@ -325,7 +325,7 @@ Reply with the *keyword* to proceed.
 				const amount = findProduct.price;
 				const monnifyDetails = await monnify.generateMonnifyDynamicAccountNumber(amount, clientEmail);
 
-				isClient.lastTransactionReference = monnifyDetails.responseBody.transactionReference;
+				isClient.lastTransactionReference = encodeURIComponent(monnifyDetails.responseBody.transactionReference);
 				await isClient.save();
 
 				await client.messages.create({
@@ -372,7 +372,7 @@ mediaUrl: [findProduct.images[0]]
 		const amount = findProduct.price;
 		const monnifyDetails = await monnify.generateMonnifyDynamicAccountNumber(amount, clientEmail);
 
-		findClient.lastTransactionReference = monnifyDetails.responseBody.transactionReference;
+		findClient.lastTransactionReference = encodeURIComponent(monnifyDetails.responseBody.transactionReference);
 		await findClient.save();
 
 		await client.messages.create({
