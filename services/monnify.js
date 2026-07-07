@@ -62,6 +62,16 @@ const generateMonnifyDynamicAccountNumber = async (amount, email) => {
 
 }
 
+const getMonnifyTransactionStatus = async (transactionReference) => {
+	const response = fetch(`https://sandbox.monnify.com/api/v2/transactions/${transactionReference}`, {
+	  headers: {
+	    Authorization: `Bearer ${process.env.MONNIFY_ACCESS_TOKEN}`
+	  }
+	});
+
+	const data = await response.json();
+	console.log(data);
+}
 
 
-module.exports = {generateMonnifyAccessToken, generateMonnifyDynamicAccountNumber}
+module.exports = {generateMonnifyAccessToken, generateMonnifyDynamicAccountNumber, getMonnifyTransactionStatus}
