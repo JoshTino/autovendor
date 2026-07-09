@@ -394,8 +394,10 @@ mediaUrl: [findProduct.images[0]]
 
 
 	} else if (msg === "confirm") {
-		const lastTransactionReference = await Client.findOne({phone})?.lastTransactionReference;
+		const lastTransactionReference = (await Client.findOne({phone}))?.lastTransactionReference;
 		const encodedTransactionReference = encodeURIComponent(lastTransactionReference);
+
+		monnify.getMonnifyTransactionStatus(encodedTransactionReference);
 	}
 
 	 res.set('Content-Type', 'text/xml');
